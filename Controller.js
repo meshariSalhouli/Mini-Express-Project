@@ -12,9 +12,9 @@ exports.booksGet = async (req, res, next) => {
 };
 
 exports.getBookById = async (req, res, next) => {
-    const { bookId } = req.params;
+    const { id } = req.params;
     try {
-        const foundBook = await Book.findById(bookId);
+        const foundBook = await Book.findById(id);
         if (foundBook) {
             console.log(foundBook);
             res.status(201).json(foundBook);
@@ -27,7 +27,8 @@ exports.getBookById = async (req, res, next) => {
 
 exports.bookCreate = async (req, res, next) => {
     try {
-        const newBook = req.body;
+        console.log(req.body);
+        const newBook = { ...req.body };
         if (req.file)
             newBook.image = `${req.protocol}://${req.get("host")}/${req.file.path}`;
         await Book.create(req.body);
@@ -38,9 +39,9 @@ exports.bookCreate = async (req, res, next) => {
 };
 
 exports.bookDelete = (req, res, next) => {
-    const { bookId } = req.params;
+    const { id } = req.params;
     try {
-        const foundBook = Book.findById(bookId);
+        const foundBook = Book.findById(id);
         if (foundBook == null) {
             console.log(foundBook);
             res.status(404).json({ message: 'Book not found' });
@@ -55,8 +56,8 @@ exports.bookDelete = (req, res, next) => {
 
 exports.bookUpdate = async (req, res, next) => {
 
-    const { bookId } = req.params;
-    const foundBook = await Book.findById(bookId);
+    const { id } = req.params;
+    const foundBook = await Book.findById(id);
     if (foundBook == null) {
         console.log(foundBook);
         res.status(404).json({ message: 'Book not found' });
